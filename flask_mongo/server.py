@@ -1,4 +1,4 @@
-from flask import Flask,Response
+from flask import Flask, Response, request
 import pymongo
 import json
 app= Flask(__name__)
@@ -22,7 +22,12 @@ except:
 @app.route('/users', methods =['POST'])
 def create_user():
     try:
-        user={"name":"A", "lastName":"AA"}
+        user = {
+            "name": request.form['name'], 
+            "lastName": request.form['lastName']
+        }
+        print("$$$$$$$$$$$$$$$$$$$$")
+        print(user)
         dbResponse =  db.users.insert_one(user)
         print(dbResponse.inserted_id)
         return Response(
