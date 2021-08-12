@@ -54,8 +54,24 @@ class RegisterForm(Form):
 def register():
     form= RegisterForm(request.form)
     if request.method == 'POST' and form.validate():
-        return render_template('register.html')
+        name= form.name.data
+        email= form.email.data
+        username= form.username.data
+        password= form.password.data
+        user={
+            "name": name,
+            "email": email,
+            "username": username,
+            "password":password
+        }
+        print(user)
+        dbResponse= db.users.insert_one(user)
+
+        flash('Yopu are now registered and can login', 'success')
+
+        redirect(url_for('index'))
     return render_template('register.html', form= form)
     
 if __name__ == '__main__':
+    app.secret_key='secret123'
     app.run(debug=True)
