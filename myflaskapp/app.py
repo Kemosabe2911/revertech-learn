@@ -67,11 +67,29 @@ def register():
         print(user)
         dbResponse= db.users.insert_one(user)
 
-        flash('Yopu are now registered and can login', 'success')
+        flash('You are now registered and can login', 'success')
 
         redirect(url_for('index'))
     return render_template('register.html', form= form)
-    
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        uname = request.form['username']
+        password_login = request.form['password']
+
+        result= list(db.users.find({'username': uname}).limit(1))
+        print(result)
+        #print(result[0]['password'])
+        password_true= result[0]['password']
+        if password_login != password_true:
+            error= 'Invalid login'
+            return render_template('login.html',error=error)
+        else:
+            msg="PASSWORD MATCH"
+            return render_template('login.html', msg= msg)
+    return render_template('login.html')
+
 if __name__ == '__main__':
     app.secret_key='secret123'
     app.run(debug=True)
