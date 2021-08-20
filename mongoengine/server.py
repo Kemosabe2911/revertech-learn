@@ -73,9 +73,25 @@ def edit():
         title_from = request.form['title1']
         title_to = request.form['title2']
         Post.objects(title=title_from).update(title= title_to)
-        return render_template('edit_post.html')
+        return render_template('delete_post.html')
     else:
         return render_template('edit_post.html')
+
+
+@app.route('/delete', methods=['GET', 'POST'])
+def delete():
+    if request.method == 'POST':
+        delete_title= request.form['title']
+        print(delete_title)
+        delete_post=Post.objects(title= delete_title)
+        print(delete_post[0].title)
+        delete_post_id= delete_post[0].id
+        print(delete_post_id)
+        Post.objects(id= delete_post_id).delete()
+        print('success')
+        return render_template('index.html')
+    else:
+        return render_template('index.html')
 
 
 if __name__ == '__main__':
