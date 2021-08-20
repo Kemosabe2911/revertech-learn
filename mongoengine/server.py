@@ -43,7 +43,9 @@ def login():
 
         for user in User.objects:
             print (user.email)
-        return render_template('index.html')
+
+        user_list= User.objects()
+        return render_template('post.html', users= user_list)
     else:
         return render_template('index.html')
 
