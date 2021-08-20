@@ -49,5 +49,34 @@ def login():
     else:
         return render_template('index.html')
 
+@app.route('/post', methods=['GET', 'POST'])
+def post():
+    if request.method == 'POST':
+        post_title = request.form['title']
+        post = Post(title= post_title)
+        post.tags = ['mongodb','mongoengine']
+        post.save()
+        print(post.title, post.tags,post.id)
+
+        for post in Post.objects:
+            print(post.title)
+        
+        #post_list= Post.objects()
+        return render_template('edit_post.html')
+
+    else:
+        render_template('post.html')
+
+@app.route('/edit', methods=['GET', 'POST'])
+def edit():
+    if request.method == 'POST':
+        title_from = request.form['title1']
+        title_to = request.form['title2']
+        Post.objects(title=title_from).update(title= title_to)
+        return render_template('edit_post.html')
+    else:
+        return render_template('edit_post.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
