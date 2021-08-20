@@ -1,4 +1,4 @@
-from flask import Flask,render_template
+from flask import Flask, render_template, request
 from mongoengine import *
 import datetime
 
@@ -25,11 +25,24 @@ class TextPost(Post):
 class LinkPost(Post):
     link_url = StringField()
 
-
-
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.route('/login', methods=['GET','POST'])
+def login():
+    if request.method == 'POST':
+        user_email = request.form['email']
+        user_fname = request.form['fname']
+        user_lname = request.form['lname']
+        user = User(email = user_email, first_name = user_fname, last_name= user_lname)
+        print(user.email, user.first_name, user.last_name)
+        user.save()
+        print(user.id)
+        return render_template('index.html')
+    else:
+        return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
