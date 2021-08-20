@@ -40,6 +40,9 @@ def login():
         print(user.email, user.first_name, user.last_name)
         user.save()
         print(user.id)
+
+        for user in User.objects:
+            print (user.email)
         return render_template('index.html')
     else:
         return render_template('index.html')
